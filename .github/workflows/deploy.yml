@@ -35,6 +35,7 @@ jobs:
         run: |
           echo "Another thing"
   deploy:
+    runs-on: ubuntu-18.04
     needs: pre_deploy
     environment:
       name: github-pages
