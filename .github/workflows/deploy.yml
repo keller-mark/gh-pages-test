@@ -29,8 +29,8 @@ jobs:
           mv ./index.html ./docs-dist/html/index.html
           touch ./docs-dist/html/.nojekyll
       - uses: actions/upload-pages-artifact@v1
-          with:
-            path: ./docs-dist/html
+        with:
+          path: ./docs-dist/html
       - name: Do more things
         run: |
           echo "Another thing"
