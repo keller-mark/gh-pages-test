@@ -1,0 +1,45 @@
+name: Deploy
+
+# Reference: https://github.com/alex-page/alexpage.dev/commit/717efbcc57d0c8ce9f64d28526263610ea444823
+
+on:
+  push:
+    branches: main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  pre_deploy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Build docs
+        run: |
+          mkdir -p ./docs-dist/html
+          mv ./index.html ./docs-dist/html/index.html
+          touch ./docs-dist/html/.nojekyll
+      - uses: actions/upload-pages-artifact@v1
+          with:
+            path: ./docs-dist/html
+      - name: Do more things
+        run: |
+          echo "Another thing"
+  deploy:
+    needs: pre_deploy
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
